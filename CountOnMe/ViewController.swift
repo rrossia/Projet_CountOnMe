@@ -39,6 +39,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        //It will Hide Keyboard
+        textView.inputView = UIView()
+        //It will Hide Keyboard tool bar
+        textView.inputAccessoryView = UIView()
     }
     
    
