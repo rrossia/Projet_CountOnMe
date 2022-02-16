@@ -28,7 +28,6 @@ class ViewController: UIViewController {
     
     var canAddOperator: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "/" && elements.last != "X"
-        
     }
     
     var expressionHaveResult: Bool {
@@ -52,6 +51,13 @@ class ViewController: UIViewController {
         textView.text = "0"
     }
     
+    @IBAction func tappedDot(_ sender: UIButton) {
+        
+        //a modifier         ///ajouter gestion deuxieme "." exemple 8.9.9
+
+                textView.text.append(".")
+
+        }
     @IBAction func tappedNumberButton(_ sender: UIButton) {
         guard let numberText = sender.title(for: .normal) else {
             return
@@ -60,8 +66,14 @@ class ViewController: UIViewController {
         if expressionHaveResult {
             textView.text = ""
         }
+        //effacer le zero initial
+        if textView.text == "0" {
+            textView.text = numberText
+        }
+        else {
+            textView.text.append(numberText)
+        }
         
-        textView.text.append(numberText)
     }
         
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
@@ -127,26 +139,7 @@ class ViewController: UIViewController {
         let result: Double
         result = calculer(operation:operations)
         textView.text.append(" = \(result)")
-        // Iterate over operations while an operand still here
-       /* while operationsToReduce.count > 1 {
-            let left = Double(operationsToReduce[0])!
-            let operand = operationsToReduce[1]
-            let right = Double(operationsToReduce[2])!
-
-            //effectuer l'operation
-            let result: Double
-            switch operand{
-                case "+": result = left + right
-                case "-": result = left - right
-                case "/": result = left / right
-                case "X": result = left * right
-                case "=": return
-                default: fatalError("Unknown operator !")
-            }
-            operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(result)", at: 0)
-        }*/
-        
+       
     }
 
     
