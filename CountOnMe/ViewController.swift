@@ -41,11 +41,13 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+   
+    // View actions
     
     @IBAction func tappedReset(_ sender: UIButton) {
         textView.text = "0"
     }
-    // View actions
+    
     @IBAction func tappedNumberButton(_ sender: UIButton) {
         guard let numberText = sender.title(for: .normal) else {
             return
@@ -57,7 +59,7 @@ class ViewController: UIViewController {
         
         textView.text.append(numberText)
     }
-    
+        
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
         if canAddOperator {
             textView.text.append(" + ")
@@ -110,31 +112,77 @@ class ViewController: UIViewController {
             return self.present(alertVC, animated: true, completion: nil)
         }
         
-        // Create local copy of operations
-        var operationsToReduce = elements
+        let operations = elements
         
-        // Iterate over operations while an operand still here
-        while operationsToReduce.count > 1 {
-            let left = Int(operationsToReduce[0])!
-            let operand = operationsToReduce[1]
-            let right = Int(operationsToReduce[2])!
-            
-            let result: Int
-            switch operand {
-            case "+": result = left + right
-            case "-": result = left - right
-            case "/": result = left / right
-            case "X": result = left * right
-            case "=": return
-            default: fatalError("Unknown operator !")
+        if operations.contains("="){
+            let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul !", preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            return self.present(alertVC, animated: true, completion: nil)
         }
-            
+        // Create local copy of operations
+        let result: Double
+        result = calculer(operation:operations)
+        textView.text.append(" = \(result)")
+        // Iterate over operations while an operand still here
+       /* while operationsToReduce.count > 1 {
+            let left = Double(operationsToReduce[0])!
+            let operand = operationsToReduce[1]
+            let right = Double(operationsToReduce[2])!
+
+            //effectuer l'operation
+            let result: Double
+            switch operand{
+                case "+": result = left + right
+                case "-": result = left - right
+                case "/": result = left / right
+                case "X": result = left * right
+                case "=": return
+                default: fatalError("Unknown operator !")
+            }
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
             operationsToReduce.insert("\(result)", at: 0)
-        }
+        }*/
         
-        textView.text.append(" = \(operationsToReduce.first!)")
     }
 
+    
+    func calculer(operation:[String])->Double{
+      var total=0 as Double
+      var signe:Double=1
+      var temp :Double=0
+      var temp2:Double=0
+      var temp3:Double=0
+      for i in 0 ... operation.count-1 {
+     
+        if(operation[i]=="+" ){
+          total=total+(temp*signe)
+          signe=1
+        }
+        else if(operation[i]=="-" ){
+          total=total+(temp*signe)
+          signe=(-1)
+     
+               
+        }
+        else if operation[i]=="/" {
+          temp2=temp
+        }
+        else if operation[i]=="X" {
+          temp3=temp
+        }
+        else{
+          temp=Double(operation[i])!
+          if(temp2>0 || temp2<0){
+            temp=temp2/temp
+            temp2=0
+          }
+          if(temp3>0 || temp3<0){
+            temp=temp3*temp
+            temp3=0
+          }
+        }
+      }
+      total=total+(temp*signe)
+      return total
+    }
 }
-
