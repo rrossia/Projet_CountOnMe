@@ -34,6 +34,15 @@ class ViewController: UIViewController {
         return textView.text.firstIndex(of: "=") != nil
     }
     
+    var divisionByZero: Bool {
+        let operations = elements
+        for i in 1 ... operations.count-1{
+            if operations[i-1] == "/" && operations[i] == "0"{
+                return true
+            }
+        }
+        return false
+    }
     // View Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,10 +61,15 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedDot(_ sender: UIButton) {
-        
-        //a modifier         ///ajouter gestion deuxieme "." exemple 8.9.9
-
-                textView.text.append(".")
+        let lastElement = elements.last
+        if !(lastElement?.contains("."))! && canAddOperator{
+            textView.text.append(".")
+        }
+        else {
+            let alertVC = UIAlertController(title: "Zéro!", message: "Entrez une expression correcte !", preferredStyle: .alert)
+           alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+           self.present(alertVC, animated: true, completion: nil)
+       }
 
         }
     @IBAction func tappedNumberButton(_ sender: UIButton) {
@@ -124,6 +138,12 @@ class ViewController: UIViewController {
         
         guard expressionHaveEnoughElement else {
             let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul !", preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            return self.present(alertVC, animated: true, completion: nil)
+        }
+        
+        guard !divisionByZero else {
+            let alertVC = UIAlertController(title: "Zéro!", message: "Division par 0 !", preferredStyle: .alert)
             alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             return self.present(alertVC, animated: true, completion: nil)
         }
