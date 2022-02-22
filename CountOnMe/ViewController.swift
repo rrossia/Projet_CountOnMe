@@ -110,7 +110,7 @@ class ViewController: UIViewController {
         }
     }
 
-    @IBAction func tappedDivision(_ sender: UIButton) {
+    @IBAction func tappedDivisionButton(_ sender: UIButton) {
         if canAddOperator {
             textView.text.append(" / ")
         } else {
@@ -120,7 +120,7 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func tappedMultiplication(_ sender: UIButton) {
+    @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
         if canAddOperator {
             textView.text.append(" X ")
         } else {
