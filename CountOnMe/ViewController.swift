@@ -11,7 +11,9 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
-    
+    var resultat:Double!
+    var isEquals:DarwinBoolean!
+   
     var elements: [String] {
         return textView.text.split(separator: " ").map { "\($0)" }
     }
@@ -92,6 +94,12 @@ class ViewController: UIViewController {
         
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
         if canAddOperator {
+            
+            if ((isEquals) != nil){
+                 textView.text=String(resultat)
+                 isEquals=false
+            }
+
             textView.text.append(" + ")
         } else {
             let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
@@ -102,6 +110,11 @@ class ViewController: UIViewController {
     
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
         if canAddOperator {
+            
+            if ((isEquals) != nil){
+                 textView.text=String(resultat)
+                 isEquals=false
+            }
             textView.text.append(" - ")
         } else {
             let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
@@ -112,7 +125,11 @@ class ViewController: UIViewController {
 
     @IBAction func tappedDivisionButton(_ sender: UIButton) {
         if canAddOperator {
-            textView.text.append(" / ")
+            if ((isEquals) != nil){
+                 textView.text=String(resultat)
+                 isEquals=false
+            }
+                        textView.text.append(" / ")
         } else {
             let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
             alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -122,7 +139,11 @@ class ViewController: UIViewController {
     
     @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
         if canAddOperator {
-            textView.text.append(" X ")
+            if ((isEquals) != nil){
+                 textView.text=String(resultat)
+                 isEquals=false
+            }
+                        textView.text.append(" X ")
         } else {
             let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
             alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -158,10 +179,12 @@ class ViewController: UIViewController {
         // Create local copy of operations
         let result: Double
         result = calculer(operation:operations)
+        resultat=result
+        isEquals=true
         textView.text.append(" = \(result)")
        
     }
-
+    
     
     func calculer(operation:[String])->Double{
       var total=0 as Double
