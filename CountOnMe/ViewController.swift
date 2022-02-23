@@ -38,9 +38,13 @@ class ViewController: UIViewController {
     
     var divisionByZero: Bool {
         let operations = elements
+        var val:Double = -1
         for i in 1 ... operations.count-1{
-            if operations[i-1] == "/" && operations[i] == "0"{
-                return true
+            if operations[i-1] == "/" {
+                val = Double(operations[i])!
+                if val == 0 {
+                    return true
+                }
             }
         }
         return false
