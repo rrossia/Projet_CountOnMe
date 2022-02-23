@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
     var resultat:Double!
-    var isEquals:DarwinBoolean!
+    var isEquals:Bool!
    
     var elements: [String] {
         return textView.text.split(separator: " ").map { "\($0)" }
@@ -59,7 +59,9 @@ class ViewController: UIViewController {
     // View actions
     
     @IBAction func tappedReset(_ sender: UIButton) {
+        
         textView.text = "0"
+         isEquals=false
     }
     
     @IBAction func tappedDot(_ sender: UIButton) {
@@ -78,7 +80,7 @@ class ViewController: UIViewController {
         guard let numberText = sender.title(for: .normal) else {
             return
         }
-        
+        isEquals=false
         if expressionHaveResult {
             textView.text = ""
         }
@@ -95,7 +97,7 @@ class ViewController: UIViewController {
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
         if canAddOperator {
             
-            if ((isEquals) != nil){
+            if ((isEquals) != nil)    &&     isEquals==true{
                  textView.text=String(resultat)
                  isEquals=false
             }
@@ -111,8 +113,8 @@ class ViewController: UIViewController {
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
         if canAddOperator {
             
-            if ((isEquals) != nil){
-                 textView.text=String(resultat)
+            if ((isEquals) != nil)	&&	 isEquals==true{
+                textView.text=String(resultat)
                  isEquals=false
             }
             textView.text.append(" - ")
@@ -125,11 +127,11 @@ class ViewController: UIViewController {
 
     @IBAction func tappedDivisionButton(_ sender: UIButton) {
         if canAddOperator {
-            if ((isEquals) != nil){
+            if ((isEquals) != nil)    &&     isEquals==true{
                  textView.text=String(resultat)
                  isEquals=false
             }
-                        textView.text.append(" / ")
+             textView.text.append(" / ")
         } else {
             let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
             alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -139,7 +141,7 @@ class ViewController: UIViewController {
     
     @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
         if canAddOperator {
-            if ((isEquals) != nil){
+            if ((isEquals) != nil)    &&     isEquals==true{
                  textView.text=String(resultat)
                  isEquals=false
             }
@@ -185,44 +187,49 @@ class ViewController: UIViewController {
        
     }
     
-    
     func calculer(operation:[String])->Double{
-      var total=0 as Double
-      var signe:Double=1
-      var temp :Double=0
-      var temp2:Double=0
-      var temp3:Double=0
-      for i in 0 ... operation.count-1 {
-     
-        if(operation[i]=="+" ){
-          total=total+(temp*signe)
-          signe=1
-        }
-        else if(operation[i]=="-" ){
-          total=total+(temp*signe)
-          signe=(-1)
-     
-               
-        }
-        else if operation[i]=="/" {
-          temp2=temp
-        }
-        else if operation[i]=="X" {
-          temp3=temp
-        }
-        else{
-          temp=Double(operation[i])!
-          if(temp2>0 || temp2<0){
-            temp=temp2/temp
-            temp2=0
+          var total=0 as Double
+          var signe:Double=1
+          var temp :Double=0
+          var temp2:Double=0
+          var temp3:Double=0
+          var verifierM:Bool=false
+          var verifierD:Bool=false
+          
+          for i in 0 ... operation.count-1 {
+         
+            if(operation[i]=="+" ){
+              total=total+(temp*signe)
+              signe=1
+            }
+            else if(operation[i]=="-" ){
+              total=total+(temp*signe)
+              signe=(-1)
+                   
+            }
+            else if operation[i]=="/" {
+              temp2=temp
+              verifierD=true
+            }
+            else if operation[i]=="X" {
+              temp3=temp
+              verifierM=true
+            }
+            else{
+              temp=Double(operation[i])!
+              if(verifierD){
+                temp=temp2/temp
+                temp2=0
+                verifierD=false
+              }
+              if(verifierM){
+                temp=temp*temp3
+                temp3=0
+                verifierM=false
+              }
+            }
           }
-          if(temp3>0 || temp3<0){
-            temp=temp3*temp
-            temp3=0
-          }
+          total=total+(temp*signe)
+          return total
         }
-      }
-      total=total+(temp*signe)
-      return total
-    }
 }
